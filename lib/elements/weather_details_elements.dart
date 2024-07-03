@@ -37,6 +37,51 @@ Icon getWeatherIcon(String iconCode, double size) {
   }
 }
 
+// AppBar for weatherDetailsPage
+AppBar weatherDetailsAppBar( BuildContext context, weatherData,){
+  return AppBar(
+    title: FutureBuilder<WeatherData>(
+      future: weatherData,
+      builder: (context, snapshot) { // Set city name as appBar title 
+        if (snapshot.hasData) {
+          var weatherData = snapshot.data!;
+          return Text(
+            weatherData.cityName,
+            style: GoogleFonts.poppins(),
+          );
+        } else if (snapshot.hasError) { // Error handling implemented
+          return Text(
+            'Weather Details',
+            style: GoogleFonts.poppins(),
+          );
+        }
+        return Text( // Text shown when loading
+          'Loading...',
+          style: GoogleFonts.poppins(),
+        );
+      },
+    ),
+    centerTitle: true, // Centred title
+    leading: GestureDetector(
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+      child: const Icon(Icons.arrow_back_ios_new_rounded, ), // Arrow to go back to HomePage
+    ),
+    backgroundColor: Theme.of(context).colorScheme.surface,
+  );
+}
+
+// Refresh button when clicked call fetchData function again and rebuilds the UI
+FloatingActionButton refreshButton(Function fetchData){
+  return FloatingActionButton( // Refresh button refresh data
+    shape: const CircleBorder(),
+    child: const Icon(Icons.refresh_rounded, color: Colors.white,),
+    onPressed: () {
+      fetchData(); // FetchData called again to get new data
+    },
+  );
+}
 
 // Main icon that shows weather condition in iconformat and as text
 Widget weatherMainIcon(BuildContext context, screenSize, weatherData){

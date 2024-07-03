@@ -6,29 +6,29 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/elements/weather_details_elements.dart';
 
-class WeatherDetailsPage extends StatefulWidget {
+class WeatherDetailsPageTablet extends StatefulWidget {
   final String lat;
   final String lon;
   final String name;
   final SharedPreferences prefs;
 
-   const WeatherDetailsPage({super.key, required this.lat, required this.lon, required this.prefs, required this.name});
+   const WeatherDetailsPageTablet({super.key, required this.lat, required this.lon, required this.prefs, required this.name});
 
   @override
-  State<WeatherDetailsPage> createState() => _WeatherDetailsPageState();
+  State<WeatherDetailsPageTablet> createState() => _WeatherDetailsPageState();
 }
 
-class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
+class _WeatherDetailsPageState extends State<WeatherDetailsPageTablet> {
   late Future<WeatherData> _weatherData;
   late Future<List<HourlyWeatherData>> _hourlyWeatherData;
 
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    fetchData();
   }
 
-  Future<void> _fetchData() async { // Fetch data and rebuild
+  Future<void> fetchData() async { // Fetch data and rebuild
     setState(() {
       _weatherData = fetchWeatherData(widget.lat, widget.lon);
       _hourlyWeatherData = fetchHourlyWeatherData(widget.lat, widget.lon);
@@ -64,46 +64,12 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
         systemNavigationBarColor: Theme.of(context).colorScheme.surface // For maintaing color on statusBar
       ),
       child: Scaffold(
-        floatingActionButton: FloatingActionButton( // Refresh button refresh data
-          shape: const CircleBorder(),
-          child: const Icon(Icons.refresh_rounded, color: Colors.white,),
-          onPressed: () {
-            _fetchData(); // FetchData called again to get new data
-          },
-        ),
-        appBar: AppBar(
-          title: FutureBuilder<WeatherData>(
-            future: _weatherData,
-            builder: (context, snapshot) { // Set city name as appBar title 
-              if (snapshot.hasData) {
-                var weatherData = snapshot.data!;
-                return Text(
-                  weatherData.cityName,
-                  style: GoogleFonts.poppins(),
-                );
-              } else if (snapshot.hasError) { // Error handling implemented
-                return Text(
-                  'Weather Details',
-                  style: GoogleFonts.poppins(),
-                );
-              }
-              return Text( // Text shown when loading
-                'Loading...',
-                style: GoogleFonts.poppins(),
-              );
-            },
-          ),
-          centerTitle: true, // Centred title
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: const Icon(Icons.arrow_back_ios_new_rounded, ), // Arrow to go back to HomePage
-          ),
-          backgroundColor: Theme.of(context).colorScheme.surface,
-        ),
+        floatingActionButton: refreshButton(fetchData),
 
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        appBar: weatherDetailsAppBar(context, _weatherData), // AppBar Widget in weather_details_elements 
+
+        backgroundColor: Theme.of(context).colorScheme.surface, // Background color for Scaffold
+
         body: FutureBuilder<WeatherData>( // Future builder used to show loading to the uyser
           future: _weatherData,
           builder: (context, snapshot) {
@@ -113,7 +79,7 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Center(
-                    child: Column(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: screenSize.height * 0.05),
@@ -121,25 +87,25 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
                         // Main icon that shows weather condition in icon format and as text with high and low temperature today
                         weatherMainIcon(context, screenSize, weatherData),
 
-                        SizedBox(height: screenSize.height * 0.07),
+                        // SizedBox(height: screenSize.height * 0.07),
 
-                        // Text stating current conditions
-                        cuurentConditionsText(),
+                        // // Text stating current conditions
+                        // cuurentConditionsText(),
 
-                        SizedBox(height: screenSize.height * 0.01),
+                        // SizedBox(height: screenSize.height * 0.01),
 
-                        // Current condition widget with Humidity percentage, Wind speed, Pressure, Feels like
-                        currentConditions(context, screenSize, weatherData),
+                        // // Current condition widget with Humidity percentage, Wind speed, Pressure, Feels like
+                        // currentConditions(context, screenSize, weatherData),
 
-                        SizedBox(height: screenSize.height * 0.03),
+                        // SizedBox(height: screenSize.height * 0.03),
 
-                        // Text stating hourly forecast
-                        hourlyWeatherForecastText(),
+                        // // Text stating hourly forecast
+                        // hourlyWeatherForecastText(),
 
-                        SizedBox(height: screenSize.height * 0.01),
+                        // SizedBox(height: screenSize.height * 0.01),
                         
-                        // Widget showing hourly forecast data
-                        hourlyWeatherForecast(_hourlyWeatherData),
+                        // // Widget showing hourly forecast data
+                        // hourlyWeatherForecast(_hourlyWeatherData),
                       
                       ],
                     ),
@@ -147,10 +113,10 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
                 ),
               );
             } else if (snapshot.hasError) { // Error handling implemented
-              return const Center(
+              return Center(
                 child: Text(
                   'Failed to load weather data',
-                  style: TextStyle(),
+                  style: GoogleFonts.poppins(fontSize: 30),
                 ),
               );
             }

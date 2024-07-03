@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/pages/home_page.dart';
+import 'package:weather_app/pages/mobileUI/home_page.dart';
+import 'package:weather_app/responsive/responsive.dart';
 import 'package:weather_app/theme/theme.dart';
 
 void main() {
@@ -19,7 +20,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: darkMode,
-      home: const HomePage(),
+      home: ResponsiveLayout(
+        mobileBody: HomePageMobile(),
+      ),
     );
   }
 }
