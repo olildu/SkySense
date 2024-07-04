@@ -30,3 +30,7 @@
 4. **Run the application**:
    ```bash
    flutter run --release
+
+## Resume
+    For more details about my qualifications, please refer to my [resume](https://example.com/resume.pdf).
+
