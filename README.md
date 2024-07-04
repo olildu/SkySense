@@ -1,16 +1,11 @@
-# weather_app
+# SkySense
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Flutter Assignment - 
+    - Implemented a very minimalistic design to the app
+    - Responsive design across all platforms
+    - Proper error logging and user friendly messages displayed
+    - AutoComplete feature when searching for cities (using Nominatim API)
+    - Data persistence is available (Created using SharedPreferences)
+    - Created the app with an AppName and an icon
+    - Mainted very readable code strucuture 
+    - Every major functions are commented ensuring other devs to work easily on this code
