@@ -21,7 +21,7 @@
 
 2. **Navigate to Folder**:
    ```bash
-   cd SkySense ```bash
+   cd SkySense 
 
 3. **Run pub get**:
    ```bash
