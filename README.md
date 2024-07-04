@@ -1,11 +1,14 @@
 # SkySense
 
-Flutter Assignment - 
-    - Implemented a very minimalistic design to the app
-    - Responsive design across all platforms
-    - Proper error logging and user friendly messages displayed
-    - AutoComplete feature when searching for cities (using Nominatim API)
-    - Data persistence is available (Created using SharedPreferences)
-    - Created the app with an AppName and an icon
-    - Mainted very readable code strucuture 
-    - Every major functions are commented ensuring other devs to work easily on this code
+Flutter Assignment
+
+## Features
+
+- **Minimalistic Design**: Implemented a clean and simple design for the app.
+- **Responsive Design**: Ensures a consistent experience across all platforms.
+- **Error Handling**: Proper error logging and user-friendly messages.
+- **AutoComplete Feature**: City search with suggestions using the Nominatim API.
+- **Data Persistence**: Implemented using `SharedPreferences`.
+- **App Branding**: Custom app name and icon.
+- **Readable Code**: Maintained a very readable code structure.
+- **Documentation**: Major functions are commented to facilitate collaboration.
