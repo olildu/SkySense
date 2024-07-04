@@ -2,26 +2,30 @@ import 'package:flutter/material.dart';
 
 class ResponsiveLayout extends StatelessWidget {
   final Widget mobileBody;
-  // final Widget desktopBody;
+  final Widget tabletBody;
 
   const ResponsiveLayout({
-    super.key,
+    Key? key,
     required this.mobileBody,
-    // required this.tabletBody,
-  });
+    required this.tabletBody,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // if (constraints.maxWidth < 600) {
-          // Display mobile layout if width is less than 600 pixels
-          return mobileBody;
-        // } else {
-          // Display desktop layout if width is 600 pixels or more
-          // return tabletBody;
-          // return Container();
-        // }
+        // Determine orientation based on width and height comparison
+        bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
+        print('Max Width: ${constraints.maxWidth}, Max Height: ${constraints.maxHeight}, Orientation: ${isPortrait ? 'Portrait' : 'Landscape'}');
+
+        // Adjust based on max width for responsiveness
+        if (constraints.maxWidth < 600 || constraints.maxHeight < 350) {
+          return mobileBody; // Use mobileBody for widths less than 600
+        } else {
+          // Use tabletBody and consider orientation for landscape adjustments
+          return isPortrait ? mobileBody : tabletBody;
+        }
       },
     );
   }

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/pages/mobileUI/weather_details_page.dart';
 import 'package:weather_app/pages/tabletUI/weather_details_page_tablet.dart';
+import 'package:weather_app/responsive/responsive.dart';
 
 // App bar for homePage 
 AppBar homePageAppBar(BuildContext context){
@@ -33,41 +34,51 @@ TextField searchBar(TextEditingController controller){
 }
 
 // Widget to load previous data stored in localStorage
-Widget previousDataUI(BuildContext context, List prevData, SharedPreferences prefs){
+Widget previousDataUI(BuildContext context, List prevData, SharedPreferences prefs) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       // Title stating Saved Previous Data
       Padding(
         padding: const EdgeInsets.only(left: 8.0),
-        child: Text("Saved Previous Data", style: GoogleFonts.poppins(fontSize: 20),),
+        child: Text(
+          "Saved Previous Data",
+          style: GoogleFonts.poppins(fontSize: 20),
+        ),
       ),
 
-      // Wrapped with gestureDetector for pageNavigation
+      // Wrapped with GestureDetector for pageNavigation
       GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WeatherDetailsPageTablet(
-                lat: prevData[1], // Access data from prevData using indexes
-                lon: prevData[2],
-                prefs: prefs,
-                name: prevData[0]
-              )
+              builder: (context) => ResponsiveLayout(
+                mobileBody: WeatherDetailsPage(
+                  lat: prevData[1], // Assuming prevData contains necessary data
+                  lon: prevData[2],
+                  name: prevData[0],
+                  prefs: prefs,
+                ),
+                tabletBody: WeatherDetailsPageTablet(
+                  lat: prevData[1],
+                  lon: prevData[2],
+                  name: prevData[0],
+                  prefs: prefs,
+                ),
+              ),
             ),
           );
         },
-        // Build card with data from prevData
         child: Card(
           color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             contentPadding: const EdgeInsets.all(10),
-            leading: Container( // Location pin Icon is built here
+            leading: Container(
               padding: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 50, 129, 220),
-                  shape: BoxShape.circle
+                color: Color.fromARGB(255, 50, 129, 220),
+                shape: BoxShape.circle,
               ),
               child: const Icon(Icons.location_on_outlined),
             ),
@@ -113,13 +124,18 @@ Widget suggestionDataUI(List suggestions, List locationData, SharedPreferences p
                       MaterialPageRoute(
                         builder: (context) => ResponsiveLayout(
                           mobileBody: WeatherDetailsPage(
-                            lat: prevData[1], // Assuming prevData contains necessary data
-                            lon: prevData[2],
-                            name: prevData[0],
+                            lat: locationData[index]["lat"], // Take data and route to page
+                            lon: locationData[index]["lon"],
+                            name: locationData[index]["display_name"],
                             prefs: prefs,
-                          name: locationData[index]["display_name"]
-                          // lon: locationData[index]["displayName"]
-                        )
+                          ),
+                          tabletBody: WeatherDetailsPageTablet(
+                            lat: locationData[index]["lat"],
+                            lon: locationData[index]["lon"],
+                            name: locationData[index]["display_name"],
+                            prefs: prefs,
+                          ),
+                        ),
                       ),
                     ).then((e){
                       initializeSharedPreferences(); // Reload the prev data again after this page recieves focus again

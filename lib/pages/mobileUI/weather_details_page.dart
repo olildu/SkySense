@@ -58,7 +58,9 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size; // ScreenSize is taken in account for responsive designs
-
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: Theme.of(context).colorScheme.surface // For maintaing color on statusBar

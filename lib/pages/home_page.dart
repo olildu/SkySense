@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/elements/home_elements.dart';
 
-class HomePageMobile extends StatefulWidget {
-  const HomePageMobile({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomePageMobile> createState() => _HomePageMobileState();
+  State<HomePage> createState() => _HomePageMobileState();
 }
 
-class _HomePageMobileState extends State<HomePageMobile> {
+class _HomePageMobileState extends State<HomePage> {
   final TextEditingController controller = TextEditingController(); // Controller for textField
   List<String> suggestions = []; // Suggestions list for getting suggestions when user searches (Auto Complete)
   List<dynamic> locationData = []; // LocationData list for properly ensuring user is routed correctly
@@ -58,7 +58,9 @@ class _HomePageMobileState extends State<HomePageMobile> {
   Future<void> initializeSharedPreferences() async {
     prefs = await SharedPreferences.getInstance(); // Init
     setState(() { // Call setState so as to rebuild the UI
-      prevData = prefs.getStringList("prevData") as List; // Save as list to prevData data is saved in the format of ["name", "lat", "lon"]
+      if(prefs.getStringList("prevData") != null){
+        prevData = prefs.getStringList("prevData") as List; // Save as list to prevData data is saved in the format of ["name", "lat", "lon"]
+      }
     });
   }
 

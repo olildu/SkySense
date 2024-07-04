@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/pages/mobileUI/home_page.dart';
-import 'package:weather_app/responsive/responsive.dart';
+import 'package:weather_app/pages/home_page.dart';
 import 'package:weather_app/theme/theme.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  runApp(const MyApp()); // Run app
 }
 
 class MyApp extends StatefulWidget {
@@ -20,9 +19,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: darkMode,
-      home: ResponsiveLayout(
-        mobileBody: HomePageMobile(),
-      ),
+      home: const HomePage() // Go to HomePage
     );
   }
 }

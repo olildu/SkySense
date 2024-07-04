@@ -86,33 +86,42 @@ FloatingActionButton refreshButton(Function fetchData){
 // Main icon that shows weather condition in iconformat and as text
 Widget weatherMainIcon(BuildContext context, screenSize, weatherData){
   return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       getWeatherIcon(weatherData.iconCode, 100), // Use dynamic weather icon
 
       SizedBox(height: screenSize.height * 0.03),
 
       // Text stating the weather condition
-      Text(
-        "${weatherData.temperature.round().toString()} °C",
-        style: GoogleFonts.poppins( fontSize: screenSize.width * 0.1),
+      FittedBox(
+        child: Text(
+          "${weatherData.temperature.round().toString()} °C",
+          style: GoogleFonts.poppins( fontSize: screenSize.width * 0.1),
+        ),
       ),
 
       SizedBox(height: screenSize.height * 0.01),
       
       // High and Low temperature of today
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "H: ${weatherData.temperatureMax.round().toString()} °C",
-            style: GoogleFonts.poppins( fontSize: screenSize.width * 0.05),
-          ),
-          SizedBox(width: screenSize.height * 0.02),
-          Text(
-            "L: ${weatherData.temperatureMin.round().toString()} °C",
-            style: GoogleFonts.poppins( fontSize: screenSize.width * 0.05),
-          ),
-        ],
+      FittedBox(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FittedBox(
+              child: Text(
+                "H: ${weatherData.temperatureMax.round().toString()} °C",
+                style: GoogleFonts.poppins( fontSize: screenSize.width * 0.05),
+              ),
+            ),
+            SizedBox(width: screenSize.height * 0.02),
+            FittedBox(
+              child: Text(
+                "L: ${weatherData.temperatureMin.round().toString()} °C",
+                style: GoogleFonts.poppins( fontSize: screenSize.width * 0.05),
+              ),
+            ),
+          ],
+        ),
       ),
     ],
   );
@@ -125,7 +134,6 @@ Widget currentConditions(BuildContext context, screenSize, weatherData) {
     child: LayoutBuilder(
       builder: (context, constraints) {
         double itemSize = (constraints.maxWidth - 10) / 2; // Calculate item size
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -153,7 +161,7 @@ Widget currentConditions(BuildContext context, screenSize, weatherData) {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(weatherData.windSpeed.toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.08),),
+                                FittedBox(child: Text(weatherData.windSpeed.toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.08),)),
                                 Container(
                                   padding: const EdgeInsets.only(bottom: 10),
                                   child: Text(" m/s", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.03),)),
@@ -195,6 +203,77 @@ Widget currentConditions(BuildContext context, screenSize, weatherData) {
                               ],
                             ),
                             Icon(Icons.speed, size: screenSize.width * 0.14),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  width: itemSize,
+                  height: itemSize,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Feels Like", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(weatherData.feelsLike.round().toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.1),),
+                                Text(" °C", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
+                              ],
+                            ),
+                            getWeatherIcon(weatherData.iconCode, 40)
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  width: itemSize,
+                  height: itemSize,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Humidity", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(weatherData.humidity.toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.1),),
+                                Text("%", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.08),),
+                              ],
+                            ),
+                            Icon(Icons.air, size: screenSize.width * 0.14),
                           ],
                         ),
                       )
@@ -390,6 +469,8 @@ class WeatherData {
   final double temperatureMax;
   final String weatherCondition;
   final int humidity;
+  final int seaLevel;
+  final int groundLevel;
   final double windSpeed;
   final String iconCode;
   final double feelsLike;
@@ -402,6 +483,8 @@ class WeatherData {
     required this.temperatureMax,
     required this.weatherCondition,
     required this.humidity,
+    required this.seaLevel,
+    required this.groundLevel,
     required this.pressure,
     required this.feelsLike,
     required this.windSpeed,
@@ -416,6 +499,8 @@ class WeatherData {
       temperatureMax: json['main']['temp_max'].toDouble(),
       weatherCondition: json['weather'][0]['main'],
       humidity: json['main']['humidity'],
+      seaLevel: json['main']['sea_level'],
+      groundLevel: json['main']['grnd_level'],
       feelsLike: json['main']['feels_like'],
       pressure: json['main']['pressure'],
       windSpeed: json['wind']['speed'].toDouble(),
@@ -423,3 +508,4 @@ class WeatherData {
     );
   }
 }
+
