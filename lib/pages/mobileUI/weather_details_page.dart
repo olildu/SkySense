@@ -87,7 +87,7 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
                         SizedBox(height: screenSize.height * 0.05),
 
                         // Main icon that shows weather condition in icon format and as text with high and low temperature today
-                        weatherMainIcon(context, screenSize, weatherData),
+                        weatherMainIcon(context, width, weatherData),
 
                         SizedBox(height: screenSize.height * 0.07),
 
@@ -119,6 +119,7 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPage> {
                 child: Text(
                   'Failed to load weather data',
                   style: GoogleFonts.poppins(fontSize: 30),
+                  textAlign: TextAlign.center,
                 ),
               );
             }

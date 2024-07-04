@@ -20,10 +20,10 @@ AppBar homePageAppBar(BuildContext context){
 // SearchBar for cities search
 TextField searchBar(TextEditingController controller){
   return TextField(
-    style: GoogleFonts.poppins(),
+    style: GoogleFonts.poppins(), // Styled Fonts
     controller: controller,
     decoration: InputDecoration(
-      hintText: 'Enter a city',
+      hintText: 'Enter a city', // Prefix
       hintStyle: GoogleFonts.poppins(),
       prefixIcon: const Icon(Icons.search),
       border: OutlineInputBorder(
@@ -53,7 +53,7 @@ Widget previousDataUI(BuildContext context, List prevData, SharedPreferences pre
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ResponsiveLayout(
+              builder: (context) => ResponsiveLayout( // Using responsive layout to figure out when to use mobileLayout vs tabletLayout
                 mobileBody: WeatherDetailsPage(
                   lat: prevData[1], // Assuming prevData contains necessary data
                   lon: prevData[2],
@@ -94,6 +94,7 @@ Widget previousDataUI(BuildContext context, List prevData, SharedPreferences pre
 Widget suggestionDataUI(List suggestions, List locationData, SharedPreferences prefs,Function initializeSharedPreferences){
   return Expanded(
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Title stating Saved Search Data
         Padding(

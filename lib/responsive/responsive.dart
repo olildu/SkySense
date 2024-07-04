@@ -17,8 +17,6 @@ class ResponsiveLayout extends StatelessWidget {
         // Determine orientation based on width and height comparison
         bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
 
-        print('Max Width: ${constraints.maxWidth}, Max Height: ${constraints.maxHeight}, Orientation: ${isPortrait ? 'Portrait' : 'Landscape'}');
-
         // Adjust based on max width for responsiveness
         if (constraints.maxWidth < 600 || constraints.maxHeight < 350) {
           return mobileBody; // Use mobileBody for widths less than 600

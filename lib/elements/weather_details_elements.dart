@@ -88,19 +88,19 @@ Widget weatherMainIcon(BuildContext context, screenSize, weatherData){
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      getWeatherIcon(weatherData.iconCode, 100), // Use dynamic weather icon
+      getWeatherIcon(weatherData.iconCode, screenSize * 0.3), // Use dynamic weather icon
 
-      SizedBox(height: screenSize.height * 0.03),
+      SizedBox(height: screenSize * 0.03),
 
       // Text stating the weather condition
       FittedBox(
         child: Text(
           "${weatherData.temperature.round().toString()} °C",
-          style: GoogleFonts.poppins( fontSize: screenSize.width * 0.1),
+          style: GoogleFonts.poppins( fontSize: screenSize * 0.1),
         ),
       ),
 
-      SizedBox(height: screenSize.height * 0.01),
+      SizedBox(height: screenSize * 0.01),
       
       // High and Low temperature of today
       FittedBox(
@@ -110,14 +110,14 @@ Widget weatherMainIcon(BuildContext context, screenSize, weatherData){
             FittedBox(
               child: Text(
                 "H: ${weatherData.temperatureMax.round().toString()} °C",
-                style: GoogleFonts.poppins( fontSize: screenSize.width * 0.05),
+                style: GoogleFonts.poppins( fontSize: screenSize * 0.05),
               ),
             ),
-            SizedBox(width: screenSize.height * 0.02),
+            SizedBox(width: screenSize * 0.02),
             FittedBox(
               child: Text(
                 "L: ${weatherData.temperatureMin.round().toString()} °C",
-                style: GoogleFonts.poppins( fontSize: screenSize.width * 0.05),
+                style: GoogleFonts.poppins( fontSize: screenSize * 0.05),
               ),
             ),
           ],
@@ -140,217 +140,27 @@ Widget currentConditions(BuildContext context, screenSize, weatherData) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: itemSize,
-                  height: itemSize,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Wind", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                FittedBox(child: Text(weatherData.windSpeed.toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.08),)),
-                                Container(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: Text(" m/s", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.03),)),
-                              ],
-                            ),
-                            Icon(Icons.air, size: screenSize.width * 0.14),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                HelperWidget(context, itemSize, screenSize, weatherData, 0),
                 const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: itemSize,
-                  height: itemSize,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Pressure", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(weatherData.pressure.toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.08),),
-                                Text(" mBar", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.03),),
-                              ],
-                            ),
-                            Icon(Icons.speed, size: screenSize.width * 0.14),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                HelperWidget(context, itemSize, screenSize, weatherData, 1),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: itemSize,
-                  height: itemSize,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Feels Like", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(weatherData.feelsLike.round().toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.1),),
-                                Text(" °C", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                              ],
-                            ),
-                            getWeatherIcon(weatherData.iconCode, 40)
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                HelperWidget(context, itemSize, screenSize, weatherData, 2),
                 const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: itemSize,
-                  height: itemSize,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Humidity", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(weatherData.humidity.toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.1),),
-                                Text("%", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.08),),
-                              ],
-                            ),
-                            Icon(Icons.air, size: screenSize.width * 0.14),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                HelperWidget(context, itemSize, screenSize, weatherData, 3),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: itemSize,
-                  height: itemSize,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Feels Like", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(weatherData.feelsLike.round().toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.1),),
-                                Text(" °C", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                              ],
-                            ),
-                            getWeatherIcon(weatherData.iconCode, 40)
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                HelperWidget(context, itemSize, screenSize, weatherData, 4),
                 const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: itemSize,
-                  height: itemSize,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Humidity", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(weatherData.humidity.toString(), style: GoogleFonts.poppins(fontSize: screenSize.width * 0.1),),
-                                Text("%", style: GoogleFonts.poppins(fontSize: screenSize.width * 0.08),),
-                              ],
-                            ),
-                            Icon(Icons.air, size: screenSize.width * 0.14),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                HelperWidget(context, itemSize, screenSize, weatherData, 5),
               ],
             ),
           ],
@@ -359,6 +169,140 @@ Widget currentConditions(BuildContext context, screenSize, weatherData) {
     ),
   );
 }
+
+
+
+Widget HelperWidget(BuildContext context, double itemSize, screenSize, weatherData, int index){
+
+  String title;
+  String value;
+  String unit;
+  IconData icon;
+
+  switch (index) {
+    case 0:
+      title = "Wind";
+      value = "${weatherData.windSpeed.round()}";
+      unit = " m/s";
+      icon = Icons.air;
+      break;
+    case 1:
+      title = "Pressure";
+      value = "${weatherData.pressure}";
+      unit = 'mBar';
+      icon = Icons.speed;
+      break;
+    case 2:
+      title = "Feels Like";
+      value = "${weatherData.feelsLike.round()}°C";
+      unit = '';
+      icon = Icons.thermostat;
+      break;
+    case 3:
+      title = "Humidity";
+      value = "${weatherData.humidity}%";
+      unit = '';
+      icon = Icons.water_drop;
+      break;
+    case 4:
+      title = "Sea Level";
+      value = "${weatherData.seaLevel}";
+      unit = '';
+      icon = Icons.waves;
+      break;
+    case 5:
+      title = "Ground";
+      value = "${weatherData.groundLevel}";
+      unit = '';
+      icon = Icons.terrain;
+      break;
+    default:
+      title = "";
+      value = "";
+      unit = '';
+      icon = Icons.error_outline;
+      break;
+  }
+
+  return Container(
+    padding: const EdgeInsets.all(10),
+    width: itemSize,
+    height: itemSize,
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.primary,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  FittedBox(
+                    child: index == 1 || index == 4 || index == 5
+                    ? 
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            value,
+                            style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),
+                          ),
+                          Text(
+                            index == 1 ? "hPa" : "m",
+                            style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),
+                          ),
+                        ],
+                      )
+                    : 
+                    Text(
+                        "$value$unit",
+                        style: GoogleFonts.poppins(fontSize: screenSize.width * 0.05),
+                    ),
+                  ),
+                ],
+              ),
+              Icon(icon, size: screenSize.width * 0.14),
+            ],
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Text stating hourly forecast
 Widget hourlyWeatherForecastText(){
@@ -421,9 +365,11 @@ Widget hourlyWeatherForecast(Future<List<HourlyWeatherData>> hourlyWeatherData) 
           ),
         );
       } else if (snapshot.hasError) {
-        return const Text(
-          'Failed to load hourly forecast',
-          style: TextStyle(),
+        return const Center(
+          child: Text(
+            'Failed to load hourly forecast',
+            style: TextStyle(),
+          ),
         );
       }
       return const CircularProgressIndicator();

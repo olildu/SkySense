@@ -34,15 +34,17 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPageTablet> {
     fetchData();
   }
 
-  Future<void> fetchData() async {
+  Future<void> fetchData() async { // Fetch data and rebuild
     setState(() {
       _weatherData = fetchWeatherData(widget.lat, widget.lon);
       _hourlyWeatherData = fetchHourlyWeatherData(widget.lat, widget.lon);
     });
-
-    // await widget.prefs.setStringList('prevData', [widget.name, widget.lat, widget.lon]);
+    
+    // Whenever data is fetched then the data is writted to the disk to ensure that the user can access it the next time 
+    await widget.prefs.setStringList('prevData', [widget.name, widget.lat, widget.lon]);
   }
 
+  // OpenWeatherMap API calls and is then passed to WeatherData class to process the JSON recieved (Used for current time data)
   Future<WeatherData> fetchWeatherData(String lat, String lon) async {
     final url = 'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=841171d30d4105b499bbd8726ffc5e70&units=metric';
     final response = await http.get(Uri.parse(url));
@@ -50,12 +52,13 @@ class _WeatherDetailsPageState extends State<WeatherDetailsPageTablet> {
     return WeatherData.fromJson(jsonDecode(response.body));
   }
 
+  // OpenWeatherMap API calls and is then passed to HourlyWeatherData class to process the JSON recieved (Used for hourly data)
   Future<List<HourlyWeatherData>> fetchHourlyWeatherData(String lat, String lon) async {
     final url = 'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&units=metric&appid=841171d30d4105b499bbd8726ffc5e70';
     final response = await http.get(Uri.parse(url));
 
-    List<dynamic> data = jsonDecode(response.body)['list'];
-    return data.map((json) => HourlyWeatherData.fromJson(json)).toList();
+      List<dynamic> data = jsonDecode(response.body)['list'];
+      return data.map((json) => HourlyWeatherData.fromJson(json)).toList(); // Data is sent to class
   }
 
   @override
@@ -65,13 +68,16 @@ Widget build(BuildContext context) {
       systemNavigationBarColor: Theme.of(context).colorScheme.surface,
     ),
     child: Scaffold(
+      floatingActionButton: refreshButton(fetchData),
       appBar: weatherDetailsAppBar(context, _weatherData),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: FutureBuilder<WeatherData>(
         future: _weatherData,
         builder: (context, snapshot) {
+          // Variables used for responsive layout building
           var height = MediaQuery.of(context).size.height;
           var width = MediaQuery.of(context).size.width;
+
           var squareSize = (height < width ? height : width) / 2;
 
           if (snapshot.hasData) {
@@ -81,6 +87,7 @@ Widget build(BuildContext context) {
               color: Theme.of(context).colorScheme.surface,
               child: Row(
                 children: [
+                  // Main weather icon with high and low temperature
                   Expanded(
                     flex: 3,
                     child: Container(
@@ -91,10 +98,12 @@ Widget build(BuildContext context) {
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: weatherMainIcon(context, MediaQuery.of(context).size, weatherData),
+                        child: weatherMainIcon(context, height, weatherData),
                       ),
                     ),
                   ),
+
+                  // Current conditions temperature
                   Expanded(
                     flex: 7,
                     child: Column(
@@ -110,7 +119,7 @@ Widget build(BuildContext context) {
                                     children: [
                                       Expanded(
                                         child: Container(
-                                          padding: EdgeInsets.all(width * 0.01),
+                                          padding: EdgeInsets.all(height * 0.01),
                                           width: squareSize,
                                           height: squareSize,
                                           decoration: BoxDecoration(
@@ -123,7 +132,7 @@ Widget build(BuildContext context) {
                                       SizedBox(width: height > width? height * 0.01 : width * 0.01,),
                                       Expanded(
                                         child: Container(
-                                          padding: EdgeInsets.all(width * 0.01),
+                                          padding: EdgeInsets.all(height * 0.01),
                                           width: squareSize,
                                           height: squareSize,
                                           decoration: BoxDecoration(
@@ -136,7 +145,7 @@ Widget build(BuildContext context) {
                                       SizedBox(width: height > width? height * 0.01 : width * 0.01,),
                                       Expanded(
                                         child: Container(
-                                          padding: EdgeInsets.all(width * 0.01),
+                                          padding: EdgeInsets.all(height * 0.01),
                                           width: squareSize,
                                           height: squareSize,
                                           decoration: BoxDecoration(
@@ -181,7 +190,7 @@ Widget build(BuildContext context) {
                                       SizedBox(width: height > width? height * 0.01 : width * 0.01,),
                                       Expanded(
                                         child: Container(
-                                          padding: EdgeInsets.all(width * 0.01),
+                                          padding: EdgeInsets.all(height * 0.01),
                                           width: squareSize,
                                           height: squareSize,
                                           decoration: BoxDecoration(
@@ -198,6 +207,8 @@ Widget build(BuildContext context) {
                             ),
                           ),
                         ),
+
+                        // Hourly forecast Widget
                         Expanded(
                           flex: 1,
                           child: Container(
@@ -216,6 +227,7 @@ Widget build(BuildContext context) {
               child: Text(
                 'Failed to load weather data',
                 style: GoogleFonts.poppins(fontSize: 30),
+                textAlign: TextAlign.center,
               ),
             );
           }
@@ -225,99 +237,4 @@ Widget build(BuildContext context) {
     ),
   );
 }
-
-Widget buildWeatherInfoContainer(double height, WeatherData weatherData, int index) {
-  String title;
-  String value;
-  IconData icon;
-
-  switch (index) {
-    case 0:
-      title = "Wind";
-      value = "${weatherData.windSpeed.round()} m/s";
-      icon = Icons.air;
-      break;
-    case 1:
-      title = "Pressure";
-      value = "${weatherData.pressure}";
-      icon = Icons.speed;
-      break;
-    case 2:
-      title = "Feels Like";
-      value = "${weatherData.feelsLike.round()}°C";
-      icon = Icons.thermostat;
-      break;
-    case 3:
-      title = "Humidity";
-      value = "${weatherData.humidity}%";
-      icon = Icons.water_drop;
-      break;
-    case 4:
-      title = "Sea Level";
-      value = "${weatherData.seaLevel}";
-      icon = Icons.waves;
-      break;
-    case 5:
-      title = "Ground";
-      value = "${weatherData.groundLevel}";
-      icon = Icons.terrain;
-      break;
-    default:
-      title = "";
-      value = "";
-      icon = Icons.error_outline;
-      break;
-  }
-
-
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        title,
-        style: GoogleFonts.poppins(fontSize: height * 0.04),
-      ),
-      Expanded(
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  FittedBox(
-                    child: index == 1 || index == 4 || index == 5
-                    ? 
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            value,
-                            style: GoogleFonts.poppins(fontSize: height * 0.05),
-                          ),
-                          Text(
-                            index == 1 ? "hPa" : "m",
-                            style: GoogleFonts.poppins(fontSize: height * 0.05),
-                          ),
-                        ],
-                      )
-                    : 
-                    Text(
-                        value,
-                        style: GoogleFonts.poppins(fontSize: height * 0.05),
-                    ),
-                  ),
-                ],
-              ),
-              Icon(icon, size: height * 0.08),
-            ],
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
 }
