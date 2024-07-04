@@ -23,6 +23,10 @@
    ```bash
    cd SkySense
 
-3. **Run the application**:
+3. **Run pub get**:
+   ```bash
+   flutter pub get
+
+4. **Run the application**:
    ```bash
    flutter run --release
