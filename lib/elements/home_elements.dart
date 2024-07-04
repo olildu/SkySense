@@ -111,10 +111,12 @@ Widget suggestionDataUI(List suggestions, List locationData, SharedPreferences p
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => WeatherDetailsPage(
-                          lat: locationData[index]["lat"],
-                          lon: locationData[index]["lon"],
-                          prefs: prefs,
+                        builder: (context) => ResponsiveLayout(
+                          mobileBody: WeatherDetailsPage(
+                            lat: prevData[1], // Assuming prevData contains necessary data
+                            lon: prevData[2],
+                            name: prevData[0],
+                            prefs: prefs,
                           name: locationData[index]["display_name"]
                           // lon: locationData[index]["displayName"]
                         )
