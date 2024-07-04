@@ -17,5 +17,12 @@
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/sky-sense.git
-   cd sky-sense
+   git clone https://github.com/olildu/SkySense.git
+
+2. **Navigate to Folder**:
+   ```bash
+   cd SkySense
+
+3. **Run the application**:
+   ```bash
+   flutter run --release
